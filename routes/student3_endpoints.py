@@ -1,9 +1,10 @@
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query
 from typing import List
 import database
+from models import student3_models as models
 from queries import student3_queries as queries
 
-app = FastAPI()
+app = APIRouter()
 
 @app.get("/team", response_model=List[dict])
 def get_all_teams():
