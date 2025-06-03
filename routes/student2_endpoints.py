@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 import database
 from queries import student2_queries as queries_student2
+from models import student2_models
 
 app = APIRouter()
 
@@ -25,3 +26,17 @@ def get_gent_location():
     for contact in contact_gent:
         contact_gent_to_return.append(contact)
     return {'contact gent': contact_gent_to_return}
+
+@app.post("/add_contacts")
+def create_contact(contact: student2_models.ContactModel):
+    query = queries_student2.insert_contact_query
+    success = database.execute_sql_query(query, (
+        contact.location,
+        contact.phone,
+        contact.email,
+        contact.contact_hours,
+    ))
+    if success == True:
+        return contact
+    else:
+        return {"error": "Something went wrong"}

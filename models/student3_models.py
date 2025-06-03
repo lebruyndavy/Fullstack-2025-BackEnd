@@ -1,14 +1,10 @@
 from pydantic import BaseModel
 
-
 class TeamMember(BaseModel):
     id: int
     name: str
     role: str
     bio: str
-
-
-
 
 class Testimonial(BaseModel):
     id: int
