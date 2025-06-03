@@ -14,9 +14,6 @@ def get_all_teams():
     except Exception :
         raise HTTPException(500, detail="Database error")
 
-
-
-
 @app.get("/testimonials", response_model=List[dict])
 def get_testimonials():
     try:
@@ -44,8 +41,6 @@ def get_team_member_by_id(id: int = Query(..., title="ID Team Member")):
         }
     except Exception as e:
         raise HTTPException(500, detail="Database error")
-
-
 
 @app.get("/testimonials/id", response_model=dict)
 def get_testimonial_by_id(id: int = Query(..., title="ID Testimoni")):
