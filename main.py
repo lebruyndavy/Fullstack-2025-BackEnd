@@ -2,12 +2,14 @@ from fastapi import FastAPI
 import database
 from queries import student1_queries as queries_student1
 from routes import get_endpoints_student2, post_endpoints_student2
+from routes import student3_endpoints
 import config
 
 app = FastAPI(docs_url=config.documentation_url)
 
 app.include_router(router=get_endpoints_student2.app)
 app.include_router(router=post_endpoints_student2.app)
+app.include_router(router=student3_endpoints.app)
 
 @app.get("/")
 def root():
