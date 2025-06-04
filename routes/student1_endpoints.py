@@ -1,6 +1,7 @@
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Query
 import database
+from models.student1_models import NewsletterSubscription
 from queries import student1_queries as queries
 
 app = APIRouter()
@@ -48,7 +49,6 @@ def get_all_portfolio_categories():
     ]
     return {"portfolio_categories": portfolio_categories}
 
-
 @app.get("/v1/portfolio/item/{item_id}/category")
 def get_portfolio_item_category(item_id: int):
     try:
@@ -60,3 +60,12 @@ def get_portfolio_item_category(item_id: int):
         raise HTTPException(status_code=404, detail="Portfolio item not found")
 
     return {"id": result[0][0], "name": result[0][1]}
+
+@app.post("/v1/newsletter/subscribe")
+def subscribe_to_newsletter(subscription: NewsletterSubscription):
+    query = queries.insert_newsletter_subscription
+    try:
+        database.execute_sql_query(query, (subscription.name, subscription.email))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Subscription failed: {e}")
+    return {"message": "Successfully subscribed to the newsletter"}
