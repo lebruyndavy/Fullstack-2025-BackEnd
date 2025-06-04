@@ -1,0 +1,49 @@
+name: Build and Deploy to Azure
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  IMAGE_NAME: lebruyndavy/fullstack-2025-backend:latest
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build Docker image
+      run: docker build -t $IMAGE_NAME .
+
+    - name: Push Docker image
+      run: docker push $IMAGE_NAME
+
+    - name: Azure Login
+      uses: Azure/login@v2.3.0
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Update container app
+      run: |
+        az containerapp update \
+          --name fullstack-2025-backend \
+          --resource-group fullstack-2025-backend \
+          --image $IMAGE_NAME
+
+    - name: Restart container app
+      run: |
+        az containerapp revision restart \
+          --name fullstack-2025-backend \
+          --resource-group fullstack-2025-backend
