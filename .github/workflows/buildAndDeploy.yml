@@ -51,7 +51,7 @@ jobs:
         revision=$(az containerapp revision list \
           --name fullstack-2025-backend \
           --resource-group fullstack-2025-backend \
-          --query "[?active].name" -o tsv)
+          --query "[-1].name" -o tsv)
         az containerapp revision restart \
           --name fullstack-2025-backend \
           --resource-group fullstack-2025-backend \
