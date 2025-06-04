@@ -46,8 +46,13 @@ jobs:
           --resource-group fullstack-2025-backend \
           --image $IMAGE_NAME
 
-    - name: Restart container app
+    - name: Restart active container app revision
       run: |
+        revision=$(az containerapp revision list \
+          --name fullstack-2025-backend \
+          --resource-group fullstack-2025-backend \
+          --query "[?active].name" -o tsv)
         az containerapp revision restart \
           --name fullstack-2025-backend \
-          --resource-group fullstack-2025-backend
+          --resource-group fullstack-2025-backend \
+          --revision $revision
