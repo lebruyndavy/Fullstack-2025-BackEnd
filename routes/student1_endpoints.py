@@ -26,8 +26,8 @@ def get_portfolio_items(category_id: Optional[int] = Query(default=None)):
         {
             "id": row[0],
             "name": row[1],
-            "image_url": row[2],
-            "category_id": row[3]
+            "category_id": row[2],
+            "image_url": row[3]
         }
         for row in result
     ]
